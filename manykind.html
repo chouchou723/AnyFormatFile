@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    
+    <meta http-equiv="Cache-Control" content="private">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body {
+        background-color: snow;
+        margin:0;
+    }
+
+    .camera {
+        width: 200px;
+        height: 200px;
+        perspective-origin: center center;
+        -moz-perspective-origin: center center;
+        -webkit-perspective-origin: center center;
+        perspective: 500px;
+        -moz-perspective: 500px;
+        -webkit-perspective: 500px;
+    }
+
+    .space {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+    }
+
+    .space div {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        font-size: 50px;
+        text-align: center;
+        line-height: 100px;
+    }
+
+    .box1 {
+        background: rgba(255, 0, 0, 0.8);
+        transform: translateX(50px) translateY(50px);
+    }
+
+    .box2 {
+        background: rgba(255, 255, 0, .8);
+        transform-origin: left top;
+        transform: translateX(150px) translateY(50px) rotateY(90deg);
+    }
+
+    .box3 {
+        background: rgba(0, 255, 0, .8);
+        transform: translateX(50px) translateY(50px) translateZ(-100px) rotateY(180deg);
+    }
+
+    .box4 {
+        background: rgba(255, 0, 255, .8);
+        transform-origin: right top;
+        transform: translateX(-50px) translateY(50px) rotateY(-90deg);
+    }
+
+    .box5 {
+        background: rgba(0, 0, 255, .8);
+        transform-origin: center bottom;
+        transform: translateX(50px) translateY(-50px) rotateX(90deg);
+    }
+
+    .box6 {
+        background: rgba(0, 255, 255, .8);
+        transform-origin: center top;
+        transform: translateX(50px) translateY(150px) rotateX(-90deg);
+    }
+
+    #compass {
+        margin: 0 auto;
+        width: 90%;
+        background-image: url(NS.png);
+        background-size: cover;
+        transform-origin: center center;
+    }
+
+    .logo {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        /*border:4px solid black;*/
+        box-sizing: border-box;
+        background-color: white;
+    }
+
+    .logo::before,
+    .logo::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        border: 4px solid transparent;
+        animation-timing-function: linear;
+    }
+
+    .logo::before {
+        top: 0;
+        left: 0;
+        border-top-color: black;
+        border-right-color: black;
+        animation: border-before 1.5s infinite;
+        animation-direction: alternate;
+    }
+
+    .logo::after {
+        bottom: 0;
+        right: 0;
+        border-bottom-color: black;
+        border-left-color: black;
+        animation: border-after 1.5s infinite;
+        animation-direction: alternate;
+    }
+
+    .red {
+        position: absolute;
+        top: 4px;
+        bottom: 0;
+        left: 0;
+        border-right: 4px solid black;
+        background-color: #EA5664;
+        animation: red 1.5s infinite;
+        animation-direction: alternate;
+    }
+
+    .orange {
+        position: absolute;
+        bottom: 0;
+        left: 27%;
+        right: 4px;
+        border-top: 4px solid black;
+        background-color: #F3B93F;
+        animation: orange 1.5s infinite;
+        animation-direction: alternate;
+    }
+
+    .white {
+        position: absolute;
+        right: 5px;
+        top: 4px;
+        bottom: 50%;
+        height: 50%;
+        border-left: 4px solid black;
+        background-color: #ffffff;
+        animation: white1 1.5s infinite;
+        animation-direction: alternate;
+    }
+	.pic{
+		background-image: url(we_04.png),linear-gradient(#f00,#00f);
+		background-blend-mode:lighten;
+		background-size: cover;
+		width: 100px;
+		height: 100px;
+	}
+    @keyframes border-before {
+        0% {
+            width: 0;
+            height: 0;
+            border-right-color: transparent;
+        }
+        5.99% {
+            border-right-color: transparent;
+        }
+        6% {
+            height: 0;
+            width: 100%;
+            border-right-color: black;
+        }
+        25%,
+        100% {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    @keyframes border-after {
+        0%,
+        24.99% {
+            width: 0;
+            height: 0;
+            border-left-color: transparent;
+            border-bottom-color: transparent;
+        }
+        25% {
+            border-left-color: transparent;
+            border-bottom-color: black;
+        }
+        36.99% {
+            border-left-color: transparent;
+        }
+        37% {
+            height: 0;
+            width: 100%;
+            border-left-color: black;
+        }
+        50%,
+        100% {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    @keyframes red {
+        0%,
+        50% {
+            width: 0;
+            opacity: 0;
+        }
+        50.01% {
+            opacity: 1;
+        }
+        65%,
+        100% {
+            width: 27%;
+            opacity: 1;
+        }
+    }
+
+    @keyframes orange {
+        0%,
+        65% {
+            height: 0;
+            opacity: 0;
+        }
+        65.01% {
+            opacity: 1;
+        }
+        80%,
+        100% {
+            height: 50%;
+            opacity: 1;
+        }
+    }
+
+    @keyframes white1 {
+        0%,
+        75% {
+            width: 0;
+            opacity: 0;
+        }
+        75.01% {
+            opacity: 1;
+        }
+        90%,
+        100% {
+            width: 27%;
+            opacity: 1;
+        }
+    }
+    .container{
+    	position: relative;
+    width: 100px;
+    height: 100px;
+    }
+    .pic123 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: url(images/1_01.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+ 
+.text {
+    position: absolute;
+    width:100%;
+    height:100%;
+    color: #000;
+    mix-blend-mode: lighten;
+    background-color: #fff;
+}
+ul{
+	background-color: grey
+}
+ul li{
+display: inline-block;
+width: 80px;
+height: 50px;
+line-height: 50px;
+		color: gainsboro;
+
+	}
+	li:hover{
+		cursor: pointer;
+		animation: trans  1s ease-out .2s , trans1 1s;
+	}
+	 @keyframes trans {
+        0%{
+        	transform: translate(0,0);
+           opacity: 1;
+        }
+        100% {
+          transform: translate(0,-30px);
+		opacity: 0;
+        }
+       /* 60%{
+        transform: translate(0,150px);
+           opacity: 0;
+        }*/
+        /*100%{
+        	transform: translate(0,0);
+           opacity: 1;
+       }*/
+    }
+    @keyframes trans1 {
+        0%{
+        	transform: translate(0,100px);
+           opacity: 0;
+        }
+        100% {
+          transform: translate(0,0x);
+		opacity: 1;
+        }
+       /* 60%{
+        transform: translate(0,150px);
+           opacity: 0;
+        }*/
+        /*100%{
+        	transform: translate(0,0);
+           opacity: 1;
+       }*/
+    }
+    #div1 {width:488px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+    </style>
+ <script type="text/javascript">
+function allowDrop(ev)
+{
+ev.preventDefault();
+}
+
+function drag(ev)
+{
+    // console.log(ev.target)
+ev.dataTransfer.setData("A",ev.target);
+}
+
+function drop(ev)
+{
+     imgContainer=document.getElementById("div1");
+ev.preventDefault();
+console.log(ev.dataTransfer.files)
+var f = ev.dataTransfer.files[0];//拖拽的图片数据
+var fileReader = new FileReader();//H5接口创建fileReader
+fileReader.readAsDataURL(f);//readAsDataURL把图片数据变成url
+fileReader.onload=function(e){
+        //在盒子中写入一个img标签，并将其读到的资源赋给src实现预览
+            imgContainer.innerHTML="<img src='"+fileReader.result+"' width='300px' height='300px' />";
+        }
+
+// var data=ev.dataTransfer.getData("A");
+// console.log(data)
+// ev.target.appendChild(document.getElementById(data));
+}
+</script>
+</head>
+
+<body>
+<div>
+	<a href="t.html">123</a>
+</div>
+ <div> <mark>112312</mark><time>11212453</time></div>
+    <p>请把图片拖放到矩形中：</p>
+
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br />
+    <div class="camera">
+        <div class="space">
+            <div class="box1">1</div>
+            <div class="box2">2</div>
+            <div class="box3">3</div>
+            <div class="box4">4</div>
+            <div class="box5">5</div>
+            <div class="box6">6</div>
+        </div>
+    </div>
+    <div>
+    	<img src="images/1_01.png" alt="">
+    </div>
+    <div class="pic">
+    	
+    </div>
+    <div>
+    	<img  data-src="attach.png" alt="">
+    </div>
+    <div class="container">
+    <div class="pic123"></div>
+    <div class="text">IMAGE</div>
+</div>
+
+
+    <div id="compass"></div>
+    <svg width="200px" height="200px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <text class="liquidFillGaugeText" text-anchor="middle" font-size="42px" transform="translate(100,120)" style="fill: #000">50.0%</text>
+        <!-- Wave -->
+        <g id="wave">
+            <path id="wave-2" fill="rgba(154, 205, 50, .8)" d="M 0 100 C 133.633 85.12 51.54 116.327 200 100 A 95 95 0 0 1 0 100 Z">
+                <animate dur="5s" repeatCount="indefinite" attributeName="d" attributeType="XML" values="M0 100 C90 28, 92 179, 200 100 A95 95 0 0 1 0 100 Z;
+                                    M0 100 C145 100, 41 100, 200 100 A95 95 0 0 1 0 100 Z;
+                                    M0 100 C90 28, 92 179, 200 100 A95 95 0 0 1 0 100 Z"></animate>
+            </path>
+        </g>
+        <circle cx="100" cy="100" r="80" stroke-width="10" stroke="white" fill="transparent"></circle>
+        <circle cx="100" cy="100" r="90" stroke-width="20" stroke="yellowgreen" fill="none" class="percentage-pie-svg"></circle>
+    </svg>
+    <div class='loader'>
+        <div class='logo'>
+            <div class="white"></div>
+        <div class="orange"></div>
+        <div class="red"></div>
+        </div>
+    </div>
+    <input type="file" id="importFile" />
+  <input type="button" onclick="upload()"/>
+  <canvas id="canvas" width="120" height="40"></canvas>
+  <a href="#" id="changeImg">看不清，换一张</a>
+  <script>
+  /**生成一个随机数**/
+  function randomNum(min,max){
+    return Math.floor( Math.random()*(max-min)+min);
+  }
+  /**生成一个随机色**/
+  function randomColor(min,max){
+    var r = randomNum(min,max);
+    var g = randomNum(min,max);
+    var b = randomNum(min,max);
+    return "rgb("+r+","+g+","+b+")";
+  }
+  drawPic();
+  document.getElementById("changeImg").onclick = function(e){
+    e.preventDefault();
+    drawPic();
+  }
+
+  /**绘制验证码图片**/
+  function drawPic(){
+    var canvas=document.getElementById("canvas");
+    var width=canvas.width;
+    var height=canvas.height;
+    var ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'bottom';
+
+    /**绘制背景色**/
+    ctx.fillStyle = randomColor(180,240); //颜色若太深可能导致看不清
+    ctx.fillRect(0,0,width,height);
+    /**绘制文字**/
+    var str = 'ABCEFGHJKLMNPQRSTWXY123456789';
+    for(var i=0; i<4; i++){
+      var txt = str[randomNum(0,str.length)];
+      ctx.fillStyle = randomColor(50,160);  //随机生成字体颜色
+      ctx.font = randomNum(15,40)+'px SimHei'; //随机生成字体大小
+      var x = 10+i*25;
+      var y = randomNum(25,45);
+      var deg = randomNum(-45, 45);
+      //修改坐标原点和旋转角度
+      ctx.translate(x,y);
+      ctx.rotate(deg*Math.PI/180);
+      ctx.fillText(txt, 0,0);
+      //恢复坐标原点和旋转角度
+      ctx.rotate(-deg*Math.PI/180);
+      ctx.translate(-x,-y);
+    }
+    /**绘制干扰线**/
+    for(var i=0; i<8; i++){
+      ctx.strokeStyle = randomColor(40,180);
+      ctx.beginPath();
+      ctx.moveTo( randomNum(0,width), randomNum(0,height) );
+      ctx.lineTo( randomNum(0,width), randomNum(0,height) );
+      ctx.stroke();
+    }
+    /**绘制干扰点**/
+    for(var i=0; i<100; i++){
+      ctx.fillStyle = randomColor(0,255);
+      ctx.beginPath();
+      ctx.arc(randomNum(0,width),randomNum(0,height), 1, 0, 2*Math.PI);
+      ctx.fill();
+    }
+  }
+  </script>
+<div style="display: ruby;font-size: 20px;ruby-position:right">
+  <rb>张</rb><rb>超</rb><rb>是</rb><rb>神</rb>
+  <rp>(</rp><rt>神</rt><rt>様</rt><rt>で</rt><rt>す</rt><rp>)</rp>
+</div>
+<ruby>
+  <rb>Aerith</rb><rb> </rb><rb>Gainsboro</rb>
+  <rt>エアリス</rt><rt>・</rt><rt>ゲインズブール</rt>
+</ruby>
+<ruby style='ruby-position:right'>
+  屋<rt>おく</rt>内<rt>ない</rt>
+  禁<rt>きん</rt>煙<rt>えん</rt>
+</ruby>
+ <ruby style="ruby-position:right	1"><rb>無<rb>常<rt>む<rt>じょう</ruby>
+<div>
+	<ul style="list-style: none;">
+		<li>Home</li>
+		<li>Video</li>
+		<li>About</li>
+	</ul>
+
+
+
+</div>
+</body>
+<script type="text/javascript">
+function upload() {
+  var filename = document.getElementById("importFile").files[0];
+  // 这时的filename不是 importFile 框中的值
+  console.log(filename);
+}
+</script>
+<script>
+var space = document.querySelectorAll('.space');
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(event) {
+        var alpha = event.alpha,
+            beta = event.beta,
+            gamma = event.gamma;
+        space[0].style.webkitTransform = 'rotateX(' + beta + 'deg) rotateY(' + gamma + 'deg) rotateZ(' + alpha + 'deg)';
+        space[0].style.transform = 'rotateX(' + beta + 'deg) rotateY(' + gamma + 'deg) rotateZ(' + alpha + 'deg)';
+        space[0].style.mozTransform = 'rotateX(' + beta + 'deg) rotateY(' + gamma + 'deg) rotateZ(' + alpha + 'deg)';
+    }, false);
+} else { document.querySelector('body').innerHTML = '你的瀏覽器不支援喔'; }
+
+var compass = document.getElementById('compass'),
+    w = compass.offsetWidth;
+compass.style.height = w + 'px';
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(event) {
+        var alpha; // 判斷是否為 iOS 裝置
+        if (event.webkitCompassHeading) {
+            alpha = event.webkitCompassHeading; // iOS 裝置必須使用 event.webkitCompassHeading
+            compass.style.webkitTransform = 'rotate(-' + alpha + 'deg)';
+            show.innerHTML = alpha;
+        } else {
+            alpha = event.alpha;
+            webkitAlpha = alpha;
+            if (!window.chrome) { webkitAlpha = alpha - 270; }
+        }
+        compass.style.Transform = 'rotate(' + alpha + 'deg)';
+        compass.style.WebkitTransform = 'rotate(' + webkitAlpha + 'deg)';
+        compass.style.MozTransform = 'rotate(-' + alpha + 'deg)';
+    }, false);
+} else {
+    document.querySelector('body').innerHTML = '你的瀏覽器不支援喔';
+}
+</script>
+
+</html>
