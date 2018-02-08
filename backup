@@ -10,7 +10,6 @@ function b({url,b}){
 b(a)
 
 
-
 function fun(n,o) {
         console.log(o)
         return {
