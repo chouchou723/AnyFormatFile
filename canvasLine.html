@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>响应式图片</title>
+     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+     <link rel="stylesheet" href="aaa.css">
+    <title>Document</title>
+    <style>
+        html,body{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body style="background: snow;position: absolute;">
+	<div class="awd-site-bg" >
+		 <canvas id="awd-site-canvas" width="414" height="736"></canvas>
+	</div>
+<div class="awd-site-bg" id="b" style='top:266px;left:160px;'></div>
+		<div id='a' style="width: 100px;height: 500px;text-align:center;padding-top:200px;z-index: 13;backface-visibility: hidden;
+    -webkit-perspective: 1000;position: relative;">a
+		</div>
+<!-- <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2285831821,1738537271&fm=27&gp=0.jpg"
+
+     srcset="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2285831821,1738537271&fm=27&gp=0.jpg 533w,https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511776959657&di=e7a5ff5df1494893a4c17e4b55fe3d69&imgtype=0&src=http%3A%2F%2Fpic74.nipic.com%2Ffile%2F20150728%2F18138004_201107753000_2.jpg 924w"
+
+     sizes="(max-width:600px)500px,1000px">
+
+     <a id="alink" href="http://www.baidu.com">下一步</a>  -->
+     <img src="images/1_01.png" alt="">
+    
+</body>
+<script type="text/javascript" src="jq.js"></script>
+<script>
+	$("#a").click(function(){
+		$("#b").addClass('active')
+
+})
+</script>
+<script>
+	   var canvas = document.getElementById("awd-site-canvas");
+       var ctx = canvas.getContext("2d");
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+    })();
+
+    var curves_array = [];
+    var curve = function (cp1x, cp1y, cp2x, cp2y, x, y, cp1xvx, cp1xvy, cp1yvx, cp1yvy, cp2xvx, cp2xvy, cp2yvx, cp2yvy) {
+        this.cp1x = cp1x;
+        this.cp1y = cp1y;
+        this.cp2x = cp2x;
+        this.cp2y = cp2y;
+        this.x = x;
+        this.y = y;
+
+        this.cp1xvx = cp1xvx;
+        this.cp1xvy = cp1xvy;
+        this.cp1yvx = cp1yvx;
+        this.cp1yvy = cp1yvy;
+
+        this.cp2xvx = cp2xvx;
+        this.cp2xvy = cp2xvy;
+        this.cp2yvx = cp2yvx;
+        this.cp2yvy = cp2yvy;
+    };
+
+
+    function awdCanvasResize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+
+    function awdCanvasInit() {
+    	var awd_bg_number_of_curves = 20;
+        for (var i = 0; i < awd_bg_number_of_curves; i++) {
+            var cp1x = Math.random() * canvas.width;//200
+            var cp1y = Math.random() * canvas.height;//300
+            var cp2x = Math.random() * canvas.width;//300
+            var cp2y = Math.random() * canvas.height;//200
+            var x = 0;
+            var y = 0;
+
+            var cp1xvx = Math.random() * 2- 1;//0.8
+            var cp1xvy = Math.random() * 2 - 1;//0.2
+
+            var cp1yvx = Math.random() * 2 - 1;
+            var cp1yvy = Math.random() * 2 - 1;
+
+            var cp2xvx= Math.random() * 2 - 1;
+            var cp2xvy= Math.random() * 2 - 1;
+
+            var cp2yvx = Math.random() * 2 - 1;
+            var cp2yvy = Math.random() * 2 - 1;
+
+
+            curves_array.push(
+                new curve(
+                    cp1x, cp1y, cp2x, cp2y,
+                    x, y,
+                    cp1xvx,cp1xvy,cp1yvx,cp1yvy,
+                    cp2xvx,cp2xvy,cp2yvx,cp2yvy
+                )
+            );
+        }
+    }
+
+
+    function awdCanvasDraw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = $("#awd-site-wrap").css('color');
+        for (var i = 0; i < curves_array.length; i++) {
+            ctx.beginPath();
+            ctx.moveTo(-100, canvas.height + 100);
+            ctx.bezierCurveTo(
+                curves_array[i].cp1x, curves_array[i].cp1y,
+                curves_array[i].cp2x, curves_array[i].cp2y,
+                canvas.width + 100, curves_array[i].y - 100
+            );
+            ctx.stroke();
+
+            if (curves_array[i].cp1x < 0 || curves_array[i].cp1x > canvas.width) {
+                curves_array[i].cp1x -= curves_array[i].cp1xvx;
+                curves_array[i].cp1xvx *= -1;
+            }
+            if (curves_array[i].cp1y < 0 || curves_array[i].cp1y > canvas.height) {
+                curves_array[i].cp1y -= curves_array[i].cp1yvy;
+                curves_array[i].cp1yvy *= -1;
+            }
+
+            if (curves_array[i].cp2x < 0 || curves_array[i].cp2x > canvas.width) {
+                curves_array[i].cp2x -= curves_array[i].cp2xvx;
+                curves_array[i].cp2xvx *= -1;
+            }
+            if (curves_array[i].cp2y < 0 || curves_array[i].cp2y > canvas.height) {
+                curves_array[i].cp2y -= curves_array[i].cp2yvy;
+                curves_array[i].cp2yvy *= -1;
+            }
+
+            curves_array[i].cp1y += curves_array[i].cp1yvy;
+            curves_array[i].cp1x += curves_array[i].cp1xvx;
+            curves_array[i].cp2x += curves_array[i].cp2xvx;
+        }
+        requestAnimFrame(awdCanvasDraw);
+    }
+
+    function awdCanvas(){
+        awdCanvasResize();
+        awdCanvasInit();
+        awdCanvasDraw();
+    }
+awdCanvas();
+</script>
+
+</html>
+
+<!-- 533w和1024w代表图片的素质,
+和sizes里的500px和1000px做对应,533大于500,所以用了533w,1024w大于1000px,所以用了1024w -->
