@@ -1,0 +1,206 @@
+//简单数组用concat slice可以复制
+//复杂的 但不带fun的 可以用JSON.parse(JSON.stringify())
+var a = [1,2,3];var b = [...a];a[0] =2; console.log(a)
+let c = [...a]//也能复制
+let a = {url:'aaa',b:'d'}
+let c = {...a}//深拷贝C
+function b({url,b}){
+ return b
+}
+b(a)
+
+
+
+function fun(n,o) {
+        console.log(o)
+        return {
+                fun:function(m){
+                return fun(m,n);
+                }
+        };
+}
+var a = fun(0);a.fun(1); a.fun(2); a.fun(3);  //undefined,0,0,0
+var b = fun(0).fun(1).fun(2).fun(3);			//undefined,0,1,2
+var c = fun(0).fun(1); c.fun(2); c.fun(3);		//undefined,0,1,1
+
+-document.documentElement.scrollHeight//整个网页的高度
+-document.body.scrollTop or document.documentElement.scrollTop//整个页面被卷了多少
+-document.documentElement.clientHeight//视图的高度,不包括标题栏侧边栏
+-obj.clientWidth,clientHeight//元素的宽度,高度
+-obj.offsetTop;//某个元素到body最顶部的距离
+function a(date=0){
+
+}
+function foo() {
+  return () => {
+    return () => {
+      return () => {
+        console.log('id:', this.id);//this指向最外层foo
+      };
+    };
+  };
+}
+
+var f = foo.call({id: 1});
+
+var t1 = f.call({id: 2})()(); // id: 1
+var t2 = f().call({id: 3})(); // id: 1
+var t3 = f()().call({id: 4}); // id: 1    
+
+function factorial(n, total) {//尾调用 递归
+  if (n === 1) return total;
+  return factorial(n - 1, n * total);
+}
+
+factorial(5, 1) // 120
+
+
+var arr1 = ['a', 'b'];
+var arr2 = ['c'];
+var arr3 = ['d', 'e'];
+
+// ES5的合并数组
+arr1.concat(arr2, arr3);
+// [ 'a', 'b', 'c', 'd', 'e' ]
+
+// ES6的合并数组
+[...arr1, ...arr2, ...arr3]
+
+//set去重
+let set = new Set([1,2,2,3,4,5,5,6])
+let arr = [...set];
+let a = new Set([1, 2, 3]);
+let b = new Set([4, 3, 2]);
+
+// 并集
+let union = new Set([...a, ...b]);
+// Set {1, 2, 3, 4}
+
+// 交集
+let intersect = new Set([...a].filter(x => b.has(x)));
+// set {2, 3}
+
+// 差集
+let difference = new Set([...a].filter(x => !b.has(x)));
+// Set {1}
+//for in for of
+var arr = ['a', 'b', 'c', 'd'];
+
+for (let a in arr) {
+  console.log(a); // 0 1 2 3
+}
+
+for (let a of arr) {
+  console.log(a); // a b c d
+}
+//解除嵌套
+let arr = [[[1, 'a'],[2, 'c']],[3, 'd'],[[4, 'e'],[5, 'f']]]
+            let b = arr.reduce((prev,cur)=>{
+                var moreArr = Array.isArray(cur[0]); //判断cur是不是一个数组
+                return  prev.concat(moreArr?[...cur]:[cur])
+            },[])
+            console.log(b)//[[1,'a'],[2,'c'],[3,'d'],[4,'e'],[5,'f']]
+
+浏览器复制
+    //         var url = document.getElementById("nihaonihao");
+    // url.select();
+    // document.execCommand("copy");
+
+
+    移动端两种写法
+    一.var scale = 1 / devicePixelRatio;
+document.querySelector('meta[name="viewport"]').setAttribute('content','initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+document.documentElement.style.fontSize = document.documentElement.clientWidth*devicePixelRatio / 7.5 + 'px';
+375手机 就是750/7.5=100px=1rem;
+320手机 就是640/7.5=85.px=1rem;得出以上公式;
+一张200px的图
+2*100=200px(设计)
+2*100=200px;(手机实际)因为meta会缩放除以2;
+2*85.=170.xxpx;(手机实际) 因为meta会缩放除以2;
+
+
+二.<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';//375等
+750的设计图,以100px=1rem为标准;
+375手机 就是375/7.5=50px=1rem;
+320手机 就是320/7.5=42.667px=1rem;得出以上公式;
+一张200的图,就是 2rem 都 以100px为标准去除;自动会被缩放;
+2*100=200px(设计)
+2*50=100px;(手机实际)
+2*42.667=84.5px;(手机实际) 正确得到缩放;
+
+//圆点效果
+<div class="awd-site-bg" id="b" style='top:266px;left:160px;'></div>
+    <div id='a' style="width: 100%;height: 500px;text-align:center;padding-top:200px;">a
+    </div>
+      document.getElementById("a").onclick=function(){
+    document.getElementById("b").className +=" active"
+  }
+.awd-site-bg {
+    position: absolute;
+    border-radius: 100%;
+    opacity: 1;
+     background-color: cadetblue;
+    color: #ffffff;
+}
+
+.active {
+    width: 100px;
+    height: 100px;
+    -webkit-transform: translate3d(0, 0, 0) scale3d(40, 40, 1);
+    -moz-transform: translate3d(0, 0, 0) scale3d(40, 40, 1);
+    -ms-transform: translate3d(0, 0, 0) scale3d(40, 40, 1);
+    transform: translate3d(0, 0, 0) scale3d(40, 40, 1);
+    -webkit-transition-property: width, height, border-radius, transform;
+    -moz-transition-property: width, height, border-radius, transform;
+    -o-transition-property: width, height, border-radius, transform;
+    transition-property: width, height, border-radius, transform;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in-out;
+    -moz-transition-timing-function: ease-in-out;
+    -o-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+    border-radius: 0;
+    z-index: 2;
+    display: block;
+    opacity: 1;
+}
+
+<div  id="q1" class="cancanHover" @click="thunderTo('/api/v1/admin')" draggable="true"
+                        @drop="drop($event)" @dragstart="drag($event)" @dragover="allowDrop($event)">
+                                <i style="font-size:50px;" class="el-icon-my-shezhi"></i>
+                                <div>帐号管理</div>
+                        </div>
+                        <div id="q2" class="cancanHover" @click="thunderTo('/reportMarket')" draggable="true"
+                        @drop="drop($event)" @dragstart="drag($event)" @dragover="allowDrop($event)">
+                            <i style="font-size:50px;" class="icon-tongjifenxi iconfont"></i>
+                            <div>报表统计</div>
+                    </div>
+
+allowDrop(ev){//阻止默认拖拽行为
+                ev.preventDefault();
+            },
+            drag(ev){//开始拖动时记录id
+                this.drag1 = ev.target.id
+            },
+            drop(ev){//放下时进行交换
+            ev.preventDefault();
+            // var data=ev.dataTransfer.getData("Text");
+            // ev.target.appendChild(document.getElementById(data));
+            let a = document.getElementById(this.drag1);
+            let c = ev.target.id||ev.path[1].id
+            let b = document.getElementById(c);   
+            this.exchange(a,b);
+            },
+            exchange(el1, el2){//交换节点
+                // console.log(el1,el2)
+            let ep1 = el1.parentNode//获取节点的父级
+            // ep2 = el2.parentNode,//如果不是在同一个父级里
+            let index1 = Array.prototype.indexOf.call(ep1.children, el1);//el1在父级里的index
+            let index2 = Array.prototype.indexOf.call(ep1.children, el2);//el2在父级里的index
+            // ep2.insertBefore(el1,ep2.children[index2]);
+             ep1.insertBefore(el2,el1);//因为是同一个父级ep1,所以直接在父级ep1里,把el2插到el1前面
+            },
