@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     
@@ -291,16 +292,24 @@ line-height: 50px;
 	}
 	li:hover{
 		cursor: pointer;
-		animation: trans  1s ease-out .2s , trans1 1s;
+		animation: trans 1.2s ease-in-out .2s ;
 	}
 	 @keyframes trans {
         0%{
         	transform: translate(0,0);
            opacity: 1;
         }
+        33%{
+             transform: translate(0,-30px);
+        opacity: 0;
+        }
+        66%{
+             transform: translate(0,30px);
+        opacity: 0;
+        }
         100% {
-          transform: translate(0,-30px);
-		opacity: 0;
+          transform: translate(0,0);
+		opacity: 1;
         }
        /* 60%{
         transform: translate(0,150px);
@@ -508,7 +517,62 @@ fileReader.onload=function(e){
 
 
 </div>
+<div>
+    <div style="width:300px;height: 300px;border-radius: 50%;background: orange;color:white;text-align: center;line-height: 300px;font-size:30px;position: relative;" onClick="loadCanvas(1)">开始
+ <canvas id="myCanvas" style="position: absolute;top:0;left: 0;opacity: 0.5">当前浏览器不支持canvas组件请升级！</canvas>
+    </div>
+
+
+
+</div>
 </body>
+ <script type="text/javascript">
+  //方法一：arc 动态画圆
+  var c = document.getElementById('myCanvas');
+  var cxt = c.getContext('2d');
+ var mW = c.width = 300;
+  var mH = c.height = 300;
+var isClicked = false;
+function draw(current){
+cxt.fillStyle = 'grey'; //设置或返回用于填充绘画的颜色、渐变或模式 染成红色
+// cxt.strokeStyle="grey"; //设置或返回用于笔触的颜色、渐变或模式
+//cxt.lineCap = 'square'; //设置或返回线条的结束端点样式
+cxt.beginPath(); //起始一条路径，或重置当前路径
+cxt.moveTo(150,150); //把路径移动到画布中的指定点，不创建线条
+
+// cxt.lineTo(100,0); //添加一个新点，然后在画布中创建从该点到最后指定点的线条
+cxt.arc(150,150,149,-0.5*Math.PI,current*(2*Math.PI) - Math.PI/2,false); //绘制一个中心点为（100,100），半径为100，起始点为1.5*Math.PI,终点为2*Math.PI,顺时针的1/4圆
+// cxt.closePath(); //创建从当前点回到起始点的路径
+cxt.fill();//填充当前绘图（路径）
+//cxt.lineWidth = 10.0; //设置或返回当前的线条宽度
+// cxt.stroke(); //绘制已定义的路径
+}
+//draw(0.6);
+function loadCanvas(now){
+if(!isClicked){
+isClicked = true;
+var t=0;
+var timer=null;
+console.log(1)
+    timer = setInterval(function(){
+        if(t>now){
+                         cxt.clearRect(0,0,c.width,c.height);
+                        // draw(now)
+            clearInterval(timer);
+            isClicked = false;
+        }else{
+            draw(t);
+            t+=0.005;
+        }
+    },15);
+    
+}
+}
+
+// loadCanvas(1);
+
+timer=null;
+  </script>
 <script type="text/javascript">
 function upload() {
   var filename = document.getElementById("importFile").files[0];
