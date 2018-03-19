@@ -203,3 +203,11 @@ allowDrop(ev){//阻止默认拖拽行为
             // ep2.insertBefore(el1,ep2.children[index2]);
              ep1.insertBefore(el2,el1);//因为是同一个父级ep1,所以直接在父级ep1里,把el2插到el1前面
             },
+//bfc
+//即两个div block元素margin会重叠,
+//利用套一个div overflow hidden 或者绝对定位来消除
+<div style="width: 100px;height: 100px;margin-bottom: 100px;"></div>
+	<div>
+		
+	<p style="width: 100px;height: 100px;margin-top: 100px;"></p>
+	</div>
