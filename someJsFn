@@ -205,7 +205,11 @@ allowDrop(ev){//阻止默认拖拽行为
             },
 //bfc
 //即两个div block元素margin会重叠,
-//利用套一个div overflow hidden 或者绝对定位来消除
+//利用套一个div overflow hidden 或者绝对定位来消除body 根元素
+浮动元素：float 除 none 以外的值
+绝对定位元素：position (absolute、fixed)
+display 为 inline-block、table-cells、flex
+overflow 除了 visible 以外的值 (hidden、auto、scroll)
 <div style="width: 100px;height: 100px;margin-bottom: 100px;"></div>
 	<div style="overflow:hidden">
 		
