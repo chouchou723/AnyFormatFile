@@ -7,6 +7,36 @@
     <meta http-equiv="Cache-Control" content="private">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Document</title>
+	<style>
+	ul{
+			width: 100%
+		}
+		li{
+			width: auto;
+			height:30px;
+			padding:0 10px;
+			position: relative;
+			cursor: pointer;
+			transition: .2s all linear;
+		}
+		li::before{
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 100%;
+			width: 0;
+			height: 100%;
+			border-bottom: 2px solid #000;
+			transition: .2s all linear;
+		}
+		li:hover::before{
+			left:0;
+			width: 100%;
+			transition-delay: 0.1s;
+		}
+		li:hover ~ li::before{
+			left: 0;
+		}</style>
     <style>
     body {
         background-color: snow;
@@ -373,6 +403,15 @@ fileReader.onload=function(e){
 </head>
 
 <body>
+	<div>
+		<ul style="list-style: none;display: flex;">
+		<li>fjeifjiej</li>
+		<li>凤飞飞</li>
+		<li>和外国人个人</li>
+		<li>范文芳晚饭4</li>
+		<li>各位各位</li>
+		</ul>
+	</div>
 <div>
 	<a href="t.html">123</a>
 </div>
