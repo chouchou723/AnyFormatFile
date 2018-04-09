@@ -107,9 +107,11 @@ let arr = [[[1, 'a'],[2, 'c']],[3, 'd'],[[4, 'e'],[5, 'f']]]
 
 
     移动端两种写法
-    一.var scale = 1 / devicePixelRatio;
+    一.
+    var scale = 1 / devicePixelRatio;
+    document.documentElement.style.fontSize = document.documentElement.clientWidth*devicePixelRatio / 7.5 + 'px';
 document.querySelector('meta[name="viewport"]').setAttribute('content','initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
-document.documentElement.style.fontSize = document.documentElement.clientWidth*devicePixelRatio / 7.5 + 'px';
+
 375手机 就是750/7.5=100px=1rem;
 320手机 就是640/7.5=85.px=1rem;得出以上公式;
 一张200px的图
@@ -118,7 +120,8 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth*d
 2*85.=170.xxpx;(手机实际) 因为meta会缩放除以2;
 
 
-二.<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+二.
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';//375等
 750的设计图,以100px=1rem为标准;
 375手机 就是375/7.5=50px=1rem;
