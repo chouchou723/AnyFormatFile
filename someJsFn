@@ -27,6 +27,7 @@ var c = fun(0).fun(1); c.fun(2); c.fun(3);		//undefined,0,1,1
 -document.documentElement.clientHeight//视图的高度,不包括标题栏侧边栏
 -obj.clientWidth,clientHeight//元素的宽度,高度
 -obj.offsetTop;//某个元素到body最顶部的距离
+Element.getBoundingClientRect()方法返回元素的大小及其相对于视口的位置
 function a(date=0){
 
 }
