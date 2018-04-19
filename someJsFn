@@ -218,3 +218,65 @@ overflow 除了 visible 以外的值 (hidden、auto、scroll)
 		
 	<p style="width: 100px;height: 100px;margin-top: 100px;"></p>
 	</div>
+	
+const shuffle = ([...arr])=>{数组随机打乱
+    let m = arr.length;
+    while(m){
+        const i = Math.floor(Math.random()*m--);
+        if(i!=m){
+
+        [arr[m],arr[i]] = [arr[i],arr[m]];
+        }else{
+            const a = Math.floor(Math.random()*m--); 
+              [arr[m],arr[a]] = [arr[a],arr[m]];
+        }
+    }
+    return arr;
+}
+const foo = [1,2,3];
+shuffle(foo)
+
+//排序方法
+//1.冒泡排序
+Array.prototype.BubbleSort = function(){
+    let i ,j;
+    for(i=1;i<this.length;i++){//数组有多少个元素,就进行多少次遍历
+        let changed = false;
+        for(j=0; j<this.length-i;j++){
+            if(this[j]>this[j+1]){//从小到大排序
+                [this[j],this[j+1]] = [this[j+1],this[j]];
+                changed = true;
+            }
+        }
+        if(!changed){//如果本轮for循环没有把change改变,说明已经排好序
+            break;
+        }
+    }
+}
+let arr = [42,12,43,5,6,73,3434,22];
+arr.BubbleSort();
+//2.选择排序
+Array.prototype.SelectSort = function(){
+    let i,j;
+    for(i=1;i<this.length;i++){
+        let maxIndex = 0;
+        for(j=0;j<this.length-i;j++){//循环时,逐步把循环范围减少,因为最后一位肯定是最大的;
+            if(this[j]>this[maxIndex]){
+                maxIndex = j;
+            }
+        }
+        [this[this.length-i],this[maxIndex]] = [this[maxIndex],this[this.length-i]];//最后一个index和最大的index交换,
+    }
+}
+//3.插入排序
+Array.prototype.SelectSort = function(){
+    let i,j;
+    for(i=1;i<this.length;i++){
+        let val = this[i];
+        for(j=i-1;j>=0&&this[j]>val;j--){//往前寻找,如果前面的大于当前的,则交换,一直到0位;
+            this[j+1] =this[j];
+        }
+        this[j+1] = val;
+    }
+}
+let arr = [43,21,10,5,9];
