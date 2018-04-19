@@ -282,4 +282,9 @@ Array.prototype.SelectSort = function(){
 }
 let arr = [43,21,10,5,9];
 上拉下拉刷新组件:http://www.mescroll.com/api.html
-
+//正则取某个字段后面的字符
+a = "User-Agent appVersion/2.6.5 DeviceId=C797D3CB-725A-4758-A193-B841DBBD69AC Channel=appStore";
+reg = /appVersion\/([\d\.]*)/;
+v = reg.exec(a)[1];
+v = a.match(reg);两种正则用法
+console.log(v)
