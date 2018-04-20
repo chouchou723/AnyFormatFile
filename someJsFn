@@ -288,3 +288,7 @@ reg = /appVersion\/([\d\.]*)/;
 v = reg.exec(a)[1];
 v = a.match(reg);两种正则用法
 console.log(v)
+
+arr.sort((a,b)=>{
+	return a-b;//正数会交换,负数保持不动, 所以a-b是升序,b-a是降序
+})
