@@ -292,3 +292,9 @@ console.log(v)
 arr.sort((a,b)=>{
 	return a-b;//正数会交换,负数保持不动, 所以a-b是升序,b-a是降序
 })
+
+ocument.write(encodeURI('中文')+ "<br />")//中文转成unicode
+document.write(decodeURI(test1))//转回来
+
+git checkout -p <branch> 文件名//对某个分支的全部文件或者部分文件进行打补丁模式
+git checkout <branch> 文件名//可以直接把某个分支的指定文件切到当前分支
