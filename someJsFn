@@ -298,3 +298,24 @@ document.write(decodeURI(test1))//转回来
 
 git checkout -p <branch> 文件名//对某个分支的全部文件或者部分文件进行打补丁模式
 git checkout <branch> 文件名//可以直接把某个分支的指定文件切到当前分支
+
+深度复制
+let b = Object.assign({},a);连fn也能一起复制
+--------------------------------------------
+var cloneObj = function(obj){
+    var str, newobj = obj.constructor === Array ? [] : {};
+    if(typeof obj !== 'object'){
+        return;
+    } else if(window.JSON){
+        str = JSON.stringify(obj), //系列化对象
+        newobj = JSON.parse(str); //还原
+    } else {
+        for(var i in obj){
+            newobj[i] = typeof obj[i] === 'object' ? 
+            cloneObj(obj[i]) : obj[i]; 
+        }
+    }
+    return newobj;
+};
+let a = {b:{c:{name:12,dd:function(){console.log(1)}}}};let b = cloneObj(a);b.b.c.dd=1;console.log(a.b.c.dd)//深度复制无法复制function
+let b =JSON.parse(JSON.stringify(a));//深度复制无法复制function
