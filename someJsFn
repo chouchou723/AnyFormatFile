@@ -320,3 +320,4 @@ var cloneObj = function(obj){
 let a = {b:{c:{name:12,dd:function(){console.log(1)}}}};let b = cloneObj(a);b.b.c.dd=1;console.log(a.b.c.dd)//深度复制无法复制function
 let b =JSON.parse(JSON.stringify(a));//深度复制无法复制function
 http://dplayer.js.org/#/zh-Hans/ D-player播放器
+https://github.com/Tencent/vConsole   v-console手机调试
