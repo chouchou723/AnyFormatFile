@@ -298,7 +298,8 @@ document.write(decodeURI(test1))//转回来
 
 git checkout -p <branch> 文件名//对某个分支的全部文件或者部分文件进行打补丁模式
 git checkout <branch> 文件名//可以直接把某个分支的指定文件切到当前分支
-
+git diff dev master --stat //查看两个分支的差异
+git diff dev master 文件路劲文件名//查看具体文件差异
 深度复制
 let b = Object.assign({},a);连fn也能一起复制
 --------------------------------------------
