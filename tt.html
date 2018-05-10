@@ -14,6 +14,7 @@
 			width: 100%
 		}
 		li{
+			font-size: 14px;
 			width: auto;
 			height:30px;
 			padding:0 10px;
@@ -95,8 +96,34 @@
   .button:hover::before {
     --size: 400px;
   }
-
-
+.first:before{
+	content: '';
+	width:2rem;
+	height: 1rem;
+	background: url(sha.png) 80px 33px no-repeat;
+	position: absolute;
+	transform: rotateX(135deg);
+	transform-origin: bottom;
+	color: grey
+	
+}
+.second:before{
+	content: '456';
+	position: absolute;
+	transform: rotateX(105deg);
+	transform-origin: bottom;
+	color: grey;
+	opacity: 0.7
+	
+}.third:before{
+	content: '789';
+	position: absolute;
+	transform: rotateX(78deg);
+	transform-origin: bottom;
+	opacity: 0.5;
+	color: grey;
+	
+}
 	</style>
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<script>
@@ -123,7 +150,7 @@ document.querySelector('meta[name="viewport"]').setAttribute('content','initial-
 	<div style="width: 100%;height: 100%;background: red"></div>
 
 	<div style="width: 100%;height: 100%;background: blue"></div> -->
-	<div style="float: left;width: 100px;background-color: red">1</div>
+	<div style="float: left;width: 120px;background-color: red">1</div>
 	<div style="margin-left: 120px;background-color: blue;overflow: hidden;">2</div>
 	<div>
 		<ul style="list-style: none;display: flex;">
@@ -134,10 +161,10 @@ document.querySelector('meta[name="viewport"]').setAttribute('content','initial-
 		<li>各位各位</li>
 		</ul>
 	</div>
-	<div style="width: 100px;height: 100px;margin-bottom: 100px;"></div>
-	<div>
+	<div style="width: 100px;height: 100px;margin-bottom: 100px;background-color: red"></div>
+	<div style="overflow: hidden;">
 		
-	<p style="width: 100px;height: 100px;margin-top: 100px;"></p>
+	<p style="width: 100px;height: 100px;margin-top: 100px;background-color: blue"></p>
 	</div>
 	<div >
 		
@@ -145,7 +172,7 @@ document.querySelector('meta[name="viewport"]').setAttribute('content','initial-
 
 	</div>
 	<div>
-		<label for="inin">2018-04<input type="month"  id='inin' value="2018-04"></label>
+		<label for="inin" style="font-size: 14px">2018-04<input type="month"  id='inin' value="2018-04"></label>
 		
 	</div>
 	<div style="display: flex">
@@ -162,9 +189,11 @@ document.querySelector('meta[name="viewport"]').setAttribute('content','initial-
 
 
 	</div>
-	<div style="transform-style: preserve-3d;perspective: 100px;perspective-origin: 100px 100px;position: relative;">
-		<p style="transform: translate3d(10px,10px,10px);position: absolute;">123</p>
-		<p style="transform: translate3d(10px,10px,-80px);position: absolute;">456</p>
+	<div style="transform-style: preserve-3d;perspective: 90px;perspective-origin: 300px 80px;position: relative;height: 230px;">
+		<p style="width:2rem;height:1rem;transform-style: preserve-3d;transform: translate3d(10px,10px,10px);position: absolute;background: url(狮子.png) 80px 33px no-repeat"
+		 class='first'></p>
+		<p style="transform-style: preserve-3d;transform: translate3d(10px,10px,-80px);position: absolute;color: #5d5151" class='second'>456</p>
+		<p style="transform-style: preserve-3d;transform: translate3d(10px,10px,-180px);position: absolute;color: gainsboro" class='third'>789</p>
 
 	</div>
 	<div>
@@ -184,41 +213,45 @@ document.querySelector('meta[name="viewport"]').setAttribute('content','initial-
 	
 	<script>
 	var c = document.getElementById('myCanvas');
-  var cxt = c.getContext('2d');
- var mW = c.width = 300;
-  var mH = c.height = 300;
-function draw(current){
-	var my_gradient=cxt.createLinearGradient(170,170,0,170);
-my_gradient.addColorStop(0,"#9e6bf1");
-my_gradient.addColorStop(1,"#b381d8");
-cxt.fillStyle=my_gradient;
-// cxt.fillStyle = 'red'; //设置或返回用于填充绘画的颜色、渐变或模式 染成红色
-// cxt.strokeStyle="grey"; //设置或返回用于笔触的颜色、渐变或模式
-//cxt.lineCap = 'square'; //设置或返回线条的结束端点样式
-cxt.beginPath(); //起始一条路径，或重置当前路径
-cxt.moveTo(150,150); //把路径移动到画布中的指定点，不创建线条
+	var cxt = c.getContext('2d');
+	var mW = c.width = 300;
+	var mH = c.height = 300;
+	function draw(current){
+		// cxt.save();
+			var my_gradient=cxt.createLinearGradient(170,170,0,170);
+			my_gradient.addColorStop(0,"#9e6bf1");
+			my_gradient.addColorStop(1,"#b381d8");
+			cxt.fillStyle=my_gradient;
+// 			cxt.shadowBlur=10;
+// cxt.shadowColor="grey";
+			// cxt.fillStyle = 'red'; //设置或返回用于填充绘画的颜色、渐变或模式 染成红色
+			// cxt.strokeStyle="grey"; //设置或返回用于笔触的颜色、渐变或模式
+			//cxt.lineCap = 'square'; //设置或返回线条的结束端点样式
+			cxt.beginPath(); //起始一条路径，或重置当前路径
+			cxt.moveTo(150,150); //把路径移动到画布中的指定点，不创建线条
 
-// cxt.lineTo(100,0); //添加一个新点，然后在画布中创建从该点到最后指定点的线条
-cxt.arc(150,150,149,-0.5*Math.PI,current*(2*Math.PI) - Math.PI/2,false); //绘制一个中心点为（100,100），半径为100，起始点为1.5*Math.PI,终点为2*Math.PI,顺时针的1/4圆
-// cxt.closePath(); //创建从当前点回到起始点的路径
-cxt.fill();//填充当前绘图（路径）
-//cxt.lineWidth = 10.0; //设置或返回当前的线条宽度
-// cxt.stroke(); //绘制已定义的路径
-}
-function clear(){
-	cxt.clearRect(0,0,c.width,c.height);
-}
-document.addEventListener('scroll', function(e){
-// console.log(document.documentElement.scrollTop)
-let a = document.documentElement.scrollTop;
-if(a>1500){
-	clear();
-	let c = (a-1500)/500;
-	draw(c);
-}else{
-	clear();
-}
-})
+			// cxt.lineTo(100,0); //添加一个新点，然后在画布中创建从该点到最后指定点的线条
+			cxt.arc(150,150,149,-0.5*Math.PI,current*(2*Math.PI) - Math.PI/2,false); //绘制一个中心点为（100,100），半径为100，起始点为1.5*Math.PI,终点为2*Math.PI,顺时针的1/4圆
+			// cxt.closePath(); //创建从当前点回到起始点的路径
+			cxt.fill();//填充当前绘图（路径）
+			// cxt.restore();
+			//cxt.lineWidth = 10.0; //设置或返回当前的线条宽度
+			// cxt.stroke(); //绘制已定义的路径
+	}
+	function clear(){
+		cxt.clearRect(0,0,c.width,c.height);
+	}
+	document.addEventListener('scroll', function(e){
+	// console.log(document.documentElement.scrollTop)
+	let a = document.documentElement.scrollTop;
+	if(a>2000){
+		clear();
+		let c = (a-2000)/500;
+		draw(c);
+	}else{
+		clear();
+	}
+	})
 	</script>
 	<script>
 		document.querySelector('.button').addEventListener('mousemove', function(e){
