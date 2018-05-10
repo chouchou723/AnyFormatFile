@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		html,body{
+			margin:0;
+			height: 100%;
+			width: 100%;
+			/*overflow: hidden;*/
+		}
+		ul{
+			width: 100%
+		}
+		li{
+			width: auto;
+			height:30px;
+			padding:0 10px;
+			position: relative;
+			cursor: pointer;
+			transition: .2s all linear;
+		}
+		li::before{
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 100%;
+			width: 0;
+			height: 100%;
+			border-bottom: 2px solid #000;
+			transition: .2s all linear;
+		}
+		li:hover::before{
+			left:0;
+			width: 100%;
+			transition-delay: 0.1s;
+		}
+		li:hover ~ li::before{
+			left: 0;
+		}
+	/*	.over{
+			animation: ss 10s ease infinite;
+			transition:all 1000ms ease;
+		}
+		@keyframes ss{
+			0%{transform: translateY(0);}
+			50%{transform: translateY(-200%);}
+			100%{transform: translateY(-300%);}
+		}*/
+.button {
+  position: relative;
+  appearance: none;
+  background: #f72359;
+  padding:0.1rem 0.2rem;
+  border: none;
+  color: white;
+  font-size: 0.1rem;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  border-radius: 100px;
+ }
+ .button1 {
+  position: relative;
+  appearance: none;
+  /*background: #f72359;*/
+
+  background: linear-gradient(to right,#9e6bf1,#a370d2 30%,#b381d8);
+  padding:0.2rem 0.4rem;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  border-radius: 100px;
+  box-shadow: 1px 2px 14px grey;
+ }
+  .button span {
+    position: relative;
+  }
+  .button::before {
+    --size: 0;  
+    content: '';
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: radial-gradient(circle closest-side, #4405f7, transparent);
+    transform: translate(-50%, -50%);
+    transition: width .2s ease, height .2s ease;
+  }
+  .button:hover::before {
+    --size: 400px;
+  }
+
+
+	</style>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script>
+		
+// document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
+document.documentElement.style.fontSize = document.documentElement.clientWidth*devicePixelRatio / 7.5 + 'px';
+var scale = 1 / devicePixelRatio;
+document.querySelector('meta[name="viewport"]').setAttribute('content','initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+	</script>
+</head>
+<body class='over'>
+	<div >
+		<img src="./1_01.png" alt="" style="width: 7.5rem;">
+	</div>
+	<div style="width: 2rem;height: 2rem;background-color: pink">
+		
+	</div>
+	<!-- <canvas class="canvas" width="926" height="500"></canvas>
+	<script src="tt.js"></script> -->
+<!-- 	<div style="width: 100%;height: 100px;background: pink">
+		<div style="height: 20px"></div>
+		<div style="padding-top:20px;float:left;width: 100%"></div>
+	</div>
+	<div style="width: 100%;height: 100%;background: red"></div>
+
+	<div style="width: 100%;height: 100%;background: blue"></div> -->
+	<div style="float: left;width: 100px;background-color: red">1</div>
+	<div style="margin-left: 120px;background-color: blue;overflow: hidden;">2</div>
+	<div>
+		<ul style="list-style: none;display: flex;">
+		<li>fjeifjiej</li>
+		<li>凤飞飞</li>
+		<li>和外国人个人</li>
+		<li>范文芳晚饭4</li>
+		<li>各位各位</li>
+		</ul>
+	</div>
+	<div style="width: 100px;height: 100px;margin-bottom: 100px;"></div>
+	<div>
+		
+	<p style="width: 100px;height: 100px;margin-top: 100px;"></p>
+	</div>
+	<div >
+		
+	<img src="./1_01.png" alt="" >
+
+	</div>
+	<div>
+		<label for="inin">2018-04<input type="month"  id='inin' value="2018-04"></label>
+		
+	</div>
+	<div style="display: flex">
+		<div style="flex: 1;background-color: blue">1</div>
+		<div style="flex: 3;background-color: red">2</div>
+	</div>
+	<video controls src="http://ugcbsy.qq.com/l0628mbcgnr.mp4?sdtfrom=v1090&type=mp4&vkey=17B6506438CB99FEEA339A90E49EF6D39B44D98B88D0B393CDB9735B98CDC54696200FD0C3C42BA09CD59D6A3DA3C54E52F3FF58E66C0F17CA632DC1A1FFDD75C678943CD2D7CAD49678D460B5B11DFD713AAC025063DA73C2AA59E23E82A28BF8282494C576BE105BB4B9138314004186C13B42E9214BCD&platform=70202&br=85&fmt=hd&sp=0&charge=0&vip=0&guid=9C867C302C60D12F8169046D799B367199A452E9"></video>
+	<div>
+		<a href="we_04.png" download="we_04.png">33</a>
+	</div>
+<div>
+		
+	<canvas id='myCanvas'></canvas>
+
+
+	</div>
+	<div style="transform-style: preserve-3d;perspective: 100px;perspective-origin: 100px 100px;position: relative;">
+		<p style="transform: translate3d(10px,10px,10px);position: absolute;">123</p>
+		<p style="transform: translate3d(10px,10px,-80px);position: absolute;">456</p>
+
+	</div>
+	<div>
+		
+	<button class="button">
+		<span>
+			change
+		</span>
+	</button>
+
+	</div>
+	<div>
+		
+<button class="button1"></button>
+
+	</div>
+	
+	<script>
+	var c = document.getElementById('myCanvas');
+  var cxt = c.getContext('2d');
+ var mW = c.width = 300;
+  var mH = c.height = 300;
+function draw(current){
+	var my_gradient=cxt.createLinearGradient(170,170,0,170);
+my_gradient.addColorStop(0,"#9e6bf1");
+my_gradient.addColorStop(1,"#b381d8");
+cxt.fillStyle=my_gradient;
+// cxt.fillStyle = 'red'; //设置或返回用于填充绘画的颜色、渐变或模式 染成红色
+// cxt.strokeStyle="grey"; //设置或返回用于笔触的颜色、渐变或模式
+//cxt.lineCap = 'square'; //设置或返回线条的结束端点样式
+cxt.beginPath(); //起始一条路径，或重置当前路径
+cxt.moveTo(150,150); //把路径移动到画布中的指定点，不创建线条
+
+// cxt.lineTo(100,0); //添加一个新点，然后在画布中创建从该点到最后指定点的线条
+cxt.arc(150,150,149,-0.5*Math.PI,current*(2*Math.PI) - Math.PI/2,false); //绘制一个中心点为（100,100），半径为100，起始点为1.5*Math.PI,终点为2*Math.PI,顺时针的1/4圆
+// cxt.closePath(); //创建从当前点回到起始点的路径
+cxt.fill();//填充当前绘图（路径）
+//cxt.lineWidth = 10.0; //设置或返回当前的线条宽度
+// cxt.stroke(); //绘制已定义的路径
+}
+function clear(){
+	cxt.clearRect(0,0,c.width,c.height);
+}
+document.addEventListener('scroll', function(e){
+// console.log(document.documentElement.scrollTop)
+let a = document.documentElement.scrollTop;
+if(a>1500){
+	clear();
+	let c = (a-1500)/500;
+	draw(c);
+}else{
+	clear();
+}
+})
+	</script>
+	<script>
+		document.querySelector('.button').addEventListener('mousemove', function(e){
+			console.log(1)
+			  const x = e.pageX - e.target.offsetLeft
+
+  const y = e.pageY - e.target.offsetTop
+
+ 
+
+  e.target.style.setProperty('--x', `${ x }px`)
+
+  e.target.style.setProperty('--y', `${ y }px`)
+		})
+// 		onmousemove = function(e){
+
+//  console.log(01)
+
+//   const x = e.pageX - e.target.offsetLeft
+
+//   const y = e.pageY - e.target.offsetTop
+
+ 
+
+//   e.target.style.setProperty('--x', `${ x }px`)
+
+//   e.target.style.setProperty('--y', `${ y }px`)
+
+ 
+
+// }
+	</script>
+</body>
+</html>
