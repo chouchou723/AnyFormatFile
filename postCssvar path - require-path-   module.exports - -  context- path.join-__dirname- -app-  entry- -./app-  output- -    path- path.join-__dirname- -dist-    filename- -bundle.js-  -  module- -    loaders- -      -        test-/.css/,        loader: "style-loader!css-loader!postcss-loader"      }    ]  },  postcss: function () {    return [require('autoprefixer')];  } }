@@ -1,0 +1,35 @@
+//http://www.css88.com/archives/7317
+//http://baijiahao.baidu.com/s?id=1569899816349555&wfr=spider&for=pc webpack2配置postcss方法
+//https://github.com/postcss/postcss/blob/HEAD/README-cn.md //官方md
+var path = require('path');
+ 
+module.exports = {
+ context: path.join(__dirname, 'app'),
+ entry: './app',
+ output: {
+   path: path.join(__dirname, 'dist'),
+   filename: 'bundle.js'
+ },
+ module: {
+   loaders: [
+     {
+       test:   /\.css$/,
+       loader: "style-loader!css-loader!postcss-loader"
+     }
+   ]
+ },
+ postcss: function () {
+   return [require('autoprefixer')({
+ browsers: ['last 2 versions']
+}),
+require('postcss-sprites')({//自动合成精灵图
+  stylesheetPath: './css',
+  spritePath: './img/sprite.png',
+  retina: true,
+  outputDimensions: true,
+  filterBy: function(image){
+    return /icons/gi.test(image.url)
+  }
+}),];
+ }
+}
