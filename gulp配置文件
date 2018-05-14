@@ -1,3 +1,4 @@
+//https://www.cnblogs.com/Darren_code/p/gulp.html
 var gulp = require('gulp')
 var gutil = require('gulp-util') //杂项功能
 var uglify = require('gulp-uglify')//js
