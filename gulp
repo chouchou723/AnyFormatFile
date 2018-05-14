@@ -1,0 +1,149 @@
+var gulp = require('gulp')
+var gutil = require('gulp-util') //杂项功能
+var uglify = require('gulp-uglify')//js
+var minifycss = require('gulp-clean-css') //css
+var clean = require('gulp-clean')//清理文件
+var filter = require('gulp-filter');
+var watchPath = require('gulp-watch-path')//watch
+var combiner = require('stream-combiner2')//配合gulp-watch-path
+var argv = require('yargs').argv//用于判断命令行参数，
+var runSequence = require('run-sequence')//控制task顺序
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant'); //png图片压缩插件
+
+var fs= require('fs')
+var config= require("./config")//设置文件路径
+/*
+配置文件路径
+*/
+   
+var handleError = function (err) {
+    var colors = gutil.colors;
+    console.log('\n')
+    gutil.log(colors.red('Error!'))
+    gutil.log('fileName: ' + colors.red(err.fileName))
+    gutil.log('lineNumber: ' + colors.red(err.lineNumber))
+    gutil.log('message: ' + err.message)
+    gutil.log('plugin: ' + colors.yellow(err.plugin))
+}
+var readConfigFile=function(path){
+    return fs.readFileSync(path,"utf-8").split('\n');
+}
+//压缩图片
+gulp.task('default', function () {
+    return gulp.src('src/images/*')
+        .pipe(imagemin({
+           interlaced: true,
+	progressive: true,
+	optimizationLevel: 5,
+	svgoPlugins: [{removeViewBox: true}]
+        }))
+        .pipe(gulp.dest('dist'));
+});
+//压缩js
+gulp.task('uglifyjs', function () {
+    var liles=readConfigFile(config.js_path_config);
+    var combined = combiner.obj([ 
+        gulp.src(liles),
+        uglify(),
+        gulp.dest(config.output_path_config)
+    ])
+    combined.on('error', handleError)
+})
+
+//压缩css
+gulp.task('minifycss', function () {
+    var liles=readConfigFile(config.css_path_config);
+    var combined = combiner.obj([ 
+        gulp.src(liles),
+        minifycss(),
+        gulp.dest(config.output_path_config)
+    ])
+    combined.on('error', handleError)
+})
+
+
+//1.copy 文件夹到当前目录的dist_temp
+gulp.task('copy',function () {
+    return gulp.src(config.input_path_config+"/**")
+        .pipe(gulp.dest(config.output_path_config));
+});
+
+/**
+*文件打包
+*/
+gulp.task('build',function () {
+  //runSequence("copy-temp","filter","clean-temp");//顺序执行代码
+  var mod = argv.m || 'all';//模块明，默认为全部
+  var inputPath=config.input_path_config;
+  if(mod != 'all'){ //true
+      //打包部分模块
+      inputPath=argv.m;
+  }
+  const jsFilter = filter(['**/*.js', '!**/*.min.js'], {restore: true});
+  const cssFilter = filter(['**/*.css', '!**/*.min.css'], {restore: true});
+  var combined = combiner.obj([
+            gulp.src("**",{cwd: inputPath }),
+            cssFilter,
+            minifycss(),
+            cssFilter.restore,
+            jsFilter,
+            uglify(),
+            jsFilter.restore,
+            gulp.dest(config.output_path_config)
+        ])
+        combined.on('error', handleError)
+ 
+   
+});
+gulp.task('watch',function () {
+   gulp.watch(config.input_path_config+"/**", function (event) {
+        var paths = watchPath(event, config.input_path_config, config.output_path_config);
+     
+        gutil.log(gutil.colors.green(event.type) + ' ' + paths.srcPath)
+        gutil.log('Dist ' + paths.distPath);
+        const jsFilter = filter(['**/*.js', '!**/*.min.js'], {restore: true});
+        const cssFilter = filter(['**/*.css', '!**/*.min.css'], {restore: true});
+        var combined = combiner.obj([
+            gulp.src(paths.srcPath,{cwd: config.input_path_config }),
+            cssFilter,
+            minifycss(),
+            cssFilter.restore,
+            jsFilter,
+            uglify(),
+            jsFilter.restore,
+            gulp.dest(paths.distDir)
+        ])
+        combined.on('error', handleError)
+    })
+});
+
+  
+gulp.task('clean', function() {
+   //var mod = argv.m || 'all';//模块明，默认为全部
+    return gulp.src(config.output_path_config)
+        .pipe(clean({force: true}));
+});
+
+// 说明
+
+gulp.task('help',function () {
+  console.log("#########################################");
+  console.log(' gulp clean          清空输出');
+  console.log(' gulp build          文件打包');
+  console.log(' gulp copy           文件拷贝');
+  console.log(' gulp build -m <module>    部分模块打包（默认全部打包）');
+  console.log(' gulp minifycss      打包配置文件中的css文件');
+  console.log(' gulp uglifyjs       打包配置文件中的js文件');
+  console.log(' gulp help           gulp参数说明');
+  console.log("#########################################");
+});
+
+gulp.task('default',function () {
+   gulp.start('help');
+});
+
+作者：lmem
+链接：https://www.jianshu.com/p/76bad8458f48
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
