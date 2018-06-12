@@ -6,6 +6,11 @@ git commit -m 'test'
 git push origin master
 
 git checkout -b newBranch 新建分支名并切换
+git branch -d mybranch 删除分支
+git branch -D mybranch 强制删除分支
+
+git merge mybranch 在当前分支合并mybranch上到内容
+
 git checkout newBranch 切换到分支
 git checkout -p <branch> 文件名//对某个分支的全部文件或者部分文件进行打补丁模式
 git checkout <branch> 文件名//可以直接把某个分支的指定文件切到当前分支
