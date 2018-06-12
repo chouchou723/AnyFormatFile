@@ -1,0 +1,13 @@
+git remote add origin URL 添加远程地址
+git remote remove origin 删除远程地址
+
+git add .
+git commit -m 'test'
+git push origin master
+
+git checkout -b newBranch 新建分支名并切换
+git checkout newBranch 切换到分支
+git checkout -p <branch> 文件名//对某个分支的全部文件或者部分文件进行打补丁模式
+git checkout <branch> 文件名//可以直接把某个分支的指定文件切到当前分支
+git diff dev master --stat //查看两个分支的差异
+git diff dev master 文件路劲文件名//查看具体文件差异
