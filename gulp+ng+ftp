@@ -1,0 +1,590 @@
+var gulp = require('gulp');  
+var ngAnnotate = require('gulp-ng-annotate');  
+var gutil = require('gulp-util');  
+var bower = require('bower');  
+var uglify = require('gulp-uglify');  
+var concat = require('gulp-concat');  
+var minifyCss = require('gulp-minify-css');  
+var rename = require('gulp-rename');  
+var ngmin = require('gulp-ngmin');
+var stripDebug = require('gulp-strip-debug');
+var clean = require('gulp-clean');
+var rev = require('gulp-rev');
+var revCollector = require('gulp-rev-collector');
+var gulpSequence = require('gulp-sequence');
+var sourcemaps = require('gulp-sourcemaps');
+var imagemin = require('gulp-imagemin');
+var htmlmin = require('gulp-htmlmin');
+//压缩流程
+//1.删除目标目录内容
+//2.根据内容压缩
+//3.无需压缩的内容直接移动到目标目录
+//4.替换压缩后文件连接
+gulp.task('default',function(){
+	//默认执行任务代码。
+})
+
+var srcScript = 'src111/**/*.js';//源文件
+var srcScript = 'src111/**/*.js';//压缩后存放目录
+var source = {
+    js: {
+        main: './src/main/webapp/js/saas/common/*.js',
+        src: './src/main/webapp/js/saas/*.js'
+    }
+};
+
+
+//清理目标文件夹
+gulp.task('clean',function(){
+    return gulp.src([
+        'build/main/webapp/css',
+        'build/main/webapp/html',
+        'build/main/webapp/img',
+        'build/main/webapp/js',
+        'build/main/webapp/lib',
+        'build/main/webapp/pica_metronic',
+        'build/main/webapp/pica-hypertension',
+        'build/main/webapp/WEB-INF',
+        'build/main/webapp/rev',
+        'build/main/webapp/pica-frontend',
+        'build/main/webapp/hypertension',
+        'build/main/webapp/mobile',
+        'build/PICA_FE.war'
+    ],{read: false}).pipe(clean());
+})
+
+//copy原目录
+gulp.task('copy', function() {
+    //return gulp.src('src/main/webapp/**/*')
+    return gulp.src([
+        'src/main/webapp/**/*',
+        '!'+'src/main/webapp/css/**/*',
+        '!'+'src/main/webapp/js/**/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/js/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/js/controllers/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/js/services/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/css/**/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/images/**/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/img/**/*',
+        '!'+'src/main/webapp/pica-frontend/patientEduManage/page/**/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/js/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/js/controllers/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/js/services/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/css/**/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/images/**/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/img/**/*',
+        '!'+'src/main/webapp/pica-hypertension/patientEduManage/page/**/*',
+        '!'+'src/main/webapp/mobile/*',
+        '!'+'src/main/webapp/mobile/js/**/*'
+    ])
+        .pipe(gulp.dest('build/main/webapp'));
+});
+
+//压缩js
+gulp.task('js', function() {
+    return gulp.src(['./src/main/webapp/js/saas/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        //.pipe(concat('all.min.js')) //合并文件为all.min.js
+        //.pipe(rename({suffix: '.min'}))
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/js/saas/')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/rev/js'))
+});
+
+//压缩高血压js
+gulp.task('hypertensionJs', function() {  //gaoxueyaJs
+    return gulp.src(['./src/main/webapp/js/hypertension/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        //.pipe(concat('all.min.js')) //合并文件为all.min.js
+        //.pipe(rename({suffix: '.min'}))
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/js/hypertension/')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/gaoxueyaRev/js'))
+});
+
+gulp.task('commonJs', function() {
+    return gulp.src(['./src/main/webapp/js/saas/common/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        // .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        //.pipe(concat('all.min.js')) //合并文件为all.min.js
+        //.pipe(rename({suffix: '.min'}))
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/js/saas/common/')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/rev/js/common/'))
+});
+
+//高血压commonjs
+gulp.task('hypertensionCommonJs', function() {//gaoxueyaCommonJs
+    return gulp.src(['./src/main/webapp/js/hypertension/common/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        // .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        //.pipe(concat('all.min.js')) //合并文件为all.min.js
+        //.pipe(rename({suffix: '.min'}))
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/js/hypertension/common/')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/gaoxueyaRev/js/common/'))
+});
+
+//压缩css
+gulp.task('css', function() {
+    return gulp.src(['src/main/webapp/css/*.css']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/css/'))
+        .pipe( rev.manifest() )
+        .pipe( gulp.dest('build/main/webapp/rev/css') );
+});
+
+//压缩高血压css
+gulp.task('hypertensionCss', function() { //gaoxueyaCss
+    return gulp.src(['src/main/webapp/css/hypertension/*.css']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/css/hypertension/'))
+        .pipe(rev.manifest() )
+        .pipe(gulp.dest('build/main/webapp/gaoxueyaRev/css') );
+});
+
+//压缩iamge，图片没有修改文件后缀名
+gulp.task('img', function() {
+    return gulp.src(['src/main/webapp/img/**/*']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(imagemin({
+            optimizationLevel: 3,//类型：Number  默认：3  取值范围：0-7（优化等级）
+            progressive: true,//类型：Boolean 默认：false 无损压缩jpg图片
+            interlaced: true,//类型：Boolean 默认：false 隔行扫描gif进行渲染
+        }))
+        .pipe(gulp.dest('build/main/webapp/img/'))
+});
+
+//压缩主要的html
+gulp.task('htmlmain', function() {
+    return gulp.src('src/main/webapp/pica_metronic/templates/frontend/**/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+                .pipe(gulp.dest('build/main/webapp/pica_metronic/templates/frontend/'))
+});
+
+//压缩高血压的html
+gulp.task('hypertensionHtml', function() {//gaoxueyahtml
+    return gulp.src('src/main/webapp/pica_metronic/templates/hypertension/**/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica_metronic/templates/hypertension/'))
+});
+
+//压缩提供给手机访问的html
+gulp.task('htmllink', function() {
+    return gulp.src('src/main/webapp/html/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+        .pipe(gulp.dest('build/main/webapp/html/'))
+});
+
+gulp.task('rev', function() {
+    return gulp.src(['build/main/webapp/rev/**/*.json','build/main/webapp/pica_metronic/templates/frontend/**/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                '../../../css': '../../../css/',
+                '../../../js/saas': '../../../js/saas/',
+                '../../../js/saas/common': '../../../js/saas/common'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica_metronic/templates/frontend/'))
+});
+
+gulp.task('gaoxueyaRev', function() {
+    return gulp.src(['build/main/webapp/gaoxueyaRev/**/*.json','build/main/webapp/pica_metronic/templates/hypertension/**/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                '../../../css/hypertension': '../../../css/hypertension',
+                '../../../js/hypertension': '../../../js/hypertension',
+                '../../../js/hypertension/common': '../../../js/hypertension/common'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica_metronic/templates/hypertension/'))
+});
+
+//提供给微信使用的短链接
+gulp.task('rev-wechat', function() {
+    return gulp.src(['build/main/webapp/rev/**/*.json','build/main/webapp/html/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                '../css/': '../css/',
+                '../js/saas': '../js/saas',
+                '../js/saas/common': '../js/saas/common/'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/html/'))
+});
+
+gulp.task('publishnohtml',
+    gulpSequence('clean','copy','js','commonJs','css','rev','rev-wechat')
+)
+
+//增强版可压缩html页面
+// gulp.task('publish',
+//     gulpSequence('clean','copy','js','commonJs','css','htmlmain','htmllink','rev','rev-wechat')
+// )
+
+//增强版可压缩html页面
+// gulp.task('publish',
+//     gulpSequence('clean','copy','js','commonJs','css','htmlmain','htmllink','rev','rev-wechat')
+// )
+
+
+gulp.task('spa_clean',function(){
+    return gulp.src([
+        'build/main/webapp/pica-frontend',
+        'build/main/webapp/pica-hypertension'
+    ],{read: false}).pipe(clean());
+})
+
+//压缩spa_frontend_js
+gulp.task('spa_frontend_js', function() {
+    return gulp.src(['./src/main/webapp/pica-frontend/patientEduManage/js/**/*.js',
+        '!./src/main/webapp/pica-frontend/patientEduManage/js/{config,lib,plugin/**/}/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/js')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/rev/js'))
+});
+//压缩spa_frontend_css
+gulp.task('spa_frontend_css', function() {
+    return gulp.src(['src/main/webapp/pica-frontend/patientEduManage/css/*.css'])
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/css'))
+        .pipe( rev.manifest() )
+        .pipe( gulp.dest('build/main/webapp/pica-frontend/patientEduManage/rev/css') );
+});
+//压缩spa_frontend_page_css  之所以拆开，是因为rev时路径无法匹配
+gulp.task('spa_frontend_page_css', function() {
+    return gulp.src(['src/main/webapp/pica-frontend/patientEduManage/page/css/*.css'])
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/page/css'))
+        .pipe( rev.manifest() )
+        .pipe( gulp.dest('build/main/webapp/pica-frontend/patientEduManage/rev/css/page') );
+});
+
+
+//压缩spa_frontend_img，图片没有修改文件后缀名
+gulp.task('spa_frontend_img', function() {
+    return gulp.src(['src/main/webapp/pica-frontend/patientEduManage/{images,img}/**/*']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(imagemin({
+            optimizationLevel: 3,//类型：Number  默认：3  取值范围：0-7（优化等级）
+            progressive: true,//类型：Boolean 默认：false 无损压缩jpg图片
+            interlaced: true,//类型：Boolean 默认：false 隔行扫描gif进行渲染
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/'))
+});
+gulp.task('spa_frontend_html', function() {
+    return gulp.src('src/main/webapp/pica-frontend/patientEduManage/**/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage'))
+});
+gulp.task('spa_frontend_rev', function() {
+    return gulp.src(['build/main/webapp/pica-frontend/patientEduManage/rev/**/*.json',
+        'build/main/webapp/rev/css/*.json',
+        'build/main/webapp/pica-frontend/patientEduManage/**/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                'css': 'css',
+                '../../css/': '../../css/',
+                'page/css':'page/css',
+                'js/': 'js/'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-frontend/patientEduManage/'))
+});
+
+gulp.task('publish_spa_frontend',
+    gulpSequence('spa_frontend_js','spa_frontend_css','spa_frontend_page_css','spa_frontend_img', 'spa_frontend_html','spa_frontend_rev')
+)
+
+
+
+//压缩spa_hypertension_js
+gulp.task('spa_hypertension_js', function() {
+    return gulp.src(['./src/main/webapp/pica-hypertension/patientEduManage/js/**/*.js',
+        '!./src/main/webapp/pica-hypertension/patientEduManage/js/{config,lib,plugin/**/}/*.js']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/js')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/rev/js'))
+});
+//压缩spa_hypertension_css
+gulp.task('spa_hypertension_css', function() {
+    return gulp.src(['src/main/webapp/pica-hypertension/patientEduManage/css/*.css'])
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/css'))
+        .pipe( rev.manifest() )
+        .pipe( gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/rev/css') );
+});
+//压缩spa_hypertension_page_css  之所以拆开，是因为rev时路径无法匹配
+gulp.task('spa_hypertension_page_css', function() {
+    return gulp.src(['src/main/webapp/pica-hypertension/patientEduManage/page/css/*.css'])
+        .pipe(minifyCss())
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/page/css'))
+        .pipe( rev.manifest() )
+        .pipe( gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/rev/css/page') );
+});
+
+
+//压缩spa_hypertension_img，图片没有修改文件后缀名
+gulp.task('spa_hypertension_img', function() {
+    return gulp.src(['src/main/webapp/pica-hypertension/patientEduManage/{images,img}/**/*']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(imagemin({
+            optimizationLevel: 3,//类型：Number  默认：3  取值范围：0-7（优化等级）
+            progressive: true,//类型：Boolean 默认：false 无损压缩jpg图片
+            interlaced: true,//类型：Boolean 默认：false 隔行扫描gif进行渲染
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/'))
+});
+gulp.task('spa_hypertension_html', function() {
+    return gulp.src('src/main/webapp/pica-hypertension/patientEduManage/**/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage'))
+});
+gulp.task('spa_hypertension_rev', function() {
+    return gulp.src(['build/main/webapp/pica-hypertension/patientEduManage/rev/**/*.json',
+        'build/main/webapp/gaoxueyaRev/css/*.json',
+        'build/main/webapp/pica-hypertension/patientEduManage/**/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                'css': 'css',
+                '../../css/hypertension/': '../../css/hypertension/',
+                'page/css':'page/css',
+                'js/': 'js/'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/pica-hypertension/patientEduManage/'))
+});
+
+gulp.task('publish_spa_hypertension',
+    gulpSequence('spa_hypertension_js','spa_hypertension_css','spa_hypertension_page_css','spa_hypertension_img', 'spa_hypertension_html','spa_hypertension_rev')
+)
+
+// 压缩mobile
+//压缩mobile_js
+gulp.task('mobile_js', function() {
+    return gulp.src(['./src/main/webapp/mobile/js/*.js'])
+        .pipe(ngAnnotate())
+        .pipe(ngmin({dynamic: false}))
+        .pipe(stripDebug())  //删除log
+        .pipe(uglify({outSourceMap: false})) //压缩
+        .pipe(rev())
+        .pipe(gulp.dest('build/main/webapp/mobile/js')) //生成后放到build目录下
+        .pipe(rev.manifest())
+        .pipe(gulp.dest('build/main/webapp/mobile/rev/js'))
+});
+//压缩mobile_img，图片没有修改文件后缀名
+gulp.task('mobile_img', function() {
+    return gulp.src(['src/main/webapp/mobile/img/*']) //注意，此处特意如此，避免顺序导致的问题
+        .pipe(imagemin({
+            optimizationLevel: 3,//类型：Number  默认：3  取值范围：0-7（优化等级）
+            progressive: true,//类型：Boolean 默认：false 无损压缩jpg图片
+            interlaced: true,//类型：Boolean 默认：false 隔行扫描gif进行渲染
+        }))
+        .pipe(gulp.dest('build/main/webapp/img/'))
+});
+gulp.task('mobile_html', function() {
+    return gulp.src('src/main/webapp/mobile/*.html')
+        .pipe(htmlmin({
+            removeComments: true, //清除HTML注释
+            collapseWhitespace: true, //压缩HTML
+            minifyJS: true, //压缩页面JS
+            minifyCSS: true //压缩页面CSS
+        }))
+        .pipe(gulp.dest('build/main/webapp/mobile'))
+});
+gulp.task('mobile_rev', function() {
+    return gulp.src(['build/main/webapp/mobile/rev/**/*.json',
+            'build/main/webapp/mobile/*.html'])
+        .pipe(revCollector({
+            replaceReved:true,
+            dirReplacements:{
+                'js/': 'js/'
+            }
+
+        }))
+        .pipe(gulp.dest('build/main/webapp/mobile/'))
+});
+
+gulp.task('publish_mobile',
+    gulpSequence('mobile_js','mobile_img', 'mobile_html','mobile_rev')
+)
+
+//高血压增强版可压缩html页面
+gulp.task('publish',
+    gulpSequence('clean','copy','js','hypertensionJs','commonJs','hypertensionCommonJs','css','hypertensionCss',
+        'htmlmain','hypertensionHtml','htmllink','rev','gaoxueyaRev','rev-wechat', 'publish_spa_frontend','publish_spa_hypertension', 'publish_mobile')
+)
+
+
+===============================================================================================================
+const gulp = require('gulp')
+const path = require('path')
+
+// phome：app首页、普通项目考试页面
+// eagle：雄鹰项目
+// md: 医典、医典排行榜
+const config = {
+    // devTest: { //部署到uat服务器上
+    //       remotePath: '/usr/share/nginx/html/phome', //部署到服务器的路径
+    //       host: '180.168.79.141', //ip地址
+    //       user: 'lilu', //帐号
+    //       port: 22, //端口
+    //       pass:'^tJw@Op2s8QK6u!p'
+    
+    //     },
+    // devTest: { //部署到测试服务器上
+    //     remotePath: '/usr/share/nginx/html/eagle', //部署到服务器的路径
+    //     host: '180.168.79.140', //ip地址
+    //     user: 'lilu', //帐号
+    //     port: 22, //端口
+    //     pass: '^tJw@Op2s8QK6u!p'
+    //
+    // },
+    // devTest: { //部署到医典测试服务器上
+    //     remotePath: '/usr/share/nginx/html/md', //部署到服务器的路径
+    //     host: '180.168.79.141', //ip地址
+    //     user: 'lilu', //帐号
+    //     port: 22, //端口
+    //     pass: '^tJw@Op2s8QK6u!p'
+    //
+	//
+    // },
+    // devTest: { //部署到医典测试服务器上
+    //     remotePath: '/usr/share/nginx/html/md', //部署到服务器的路径
+    //     host: '180.168.79.139', //ip地址
+    //     user: 'lilu', //帐号
+    //     port: 22, //端口
+    //     pass: '^tJw@Op2s8QK6u!p'
+    //
+    // },
+
+    devTest: { //部署到test1服务器上
+        remotePath: '/usr/share/nginx/html/phome', //部署到服务器的路径
+        host: '180.168.79.139', //ip地址
+        user: 'pica', //帐号
+        port: 22, //端口
+        pass: 'pica'//'^tJw@Op2s8QK6u!p'
+
+    },
+    // devTest: { //部署到test2服务器上
+    //     remotePath: '/usr/share/nginx/html/phome', //部署到服务器的路径
+    //     host: '180.168.79.140', //ip地址
+    //     user: 'lilu', //帐号
+    //     port: 22, //端口
+    //     pass: '^tJw@Op2s8QK6u!p'
+    //
+    // },
+    publicPath: '/dist/', //程序在网站根路径地址
+
+}
+
+
+
+/**
+ * 清除生产目录文件
+ */
+const del = require('del')
+gulp.task('clean', ['upload'], function (callback) {
+    console.log('## 已经成功部署到服务器上')
+    // console.log('## 清除原来编译的代码')
+    // del(['.' + config.publicPath], callback)
+})
+
+/**
+ * 编译代码
+ */
+const webpack = require('webpack')
+
+const webpackConfig = require('./configs/webpack.prod.conf')
+
+gulp.task('build', function (callback) {
+    console.log('## 代码编译开始')
+
+    webpack(webpackConfig, function (err, state) {
+        console.log('## 代码编译完成')
+        callback(err)
+    })
+})
+
+/**
+ * 编译代码，自动部署到服务器
+ */
+const ftp = require('gulp-sftp')
+gulp.task('upload', ['build'], function (callback) {
+    console.log('## 正在部署到服务器上')
+    var dev = config.devTest
+    gulp.src('.' + config.publicPath + '**')
+        .pipe(ftp(Object.assign(dev, { callback })))
+})
+
+/**
+ * 上传到测试服务器上
+ */
+
+gulp.task('publish', ['clean'])
+
+
+
+
