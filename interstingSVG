@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+path {
+    stroke: yellow;
+    fill: transparent;
+    stroke-width: 1.5px;
+}
+@keyframes act {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+</style>
+</head>
+<body>
+<svg width="580" height="400">
+    <path d="m262.59622,90.56177l34.74561,60.80042l-14.32703,7.17541l43.75135,52.09264l-14.32061,8.69967l54.08581,87.23186l-91.73919,-66.84884l17.49797,-9.28344l-57,-42.81731l20.425,-13.23194l-60.18379,-44.91723l67.06487,-38.90124z">
+</svg>
+<script>
+var char = 'http://www.w3.org/2000/svg',
+    path = document.getElementsByTagNameNS(char, 'path')[0],
+    len = path.getTotalLength();
+
+path.style.strokeDasharray = len;
+
+path.style.strokeDashoffset = -len;
+path.style.animation = 'act 2s linear infinite'
+</script>
+</body>
+</html>
