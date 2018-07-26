@@ -160,6 +160,27 @@ awdCanvas();
 </script>
 
 </html>
-
+<!--
+图片从中心开始放大显示
+var c=document.getElementById("test");
+var cxt=c.getContext("2d");
+cxt.fillStyle = "white";
+cxt.fillRect(0,0,100,100);
+var img=new Image()
+img.src="./a.jpg"
+img.onload = function(){
+var i =0;
+changeC(i);
+};
+function changeC(i){
+		setInterval(function(){
+cxt.save();
+cxt.arc(50,50,1+i,0,2*Math.PI);
+cxt.clip();
+cxt.drawImage(img,0,0,100,100);
+i+=5;
+cxt.restore();
+},60)
+} -->
 <!-- 533w和1024w代表图片的素质,
 和sizes里的500px和1000px做对应,533大于500,所以用了533w,1024w大于1000px,所以用了1024w -->
