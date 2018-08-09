@@ -1,0 +1,177 @@
+
+
+    /**
+     * 调用 app 的分享方法
+     */
+    function appShare(){//target
+        var title = "2018艺下“夏日倒影”手机摄影大赛";
+        var content = "请为编号 18 投票";
+        var origin = window.location.origin;
+        var url = origin+"/activities/share/23";
+        var picId = origin+"/attachs/img/8a9f4f6364e9fc030164ef3dcca9000d/SQUARE";
+        var param = {"title":title, "content":content, "url":url, "picId":picId};
+
+        if(isIOS){
+            window.webkit.messageHandlers.Share.postMessage(param);//ios调用方法;
+
+        }else {
+
+            // 调用方法
+            window.andObj.share(JSON.stringify(param));
+            window.bridge.callRouter;
+        }
+    }
+
+    /**
+     * 关注
+     */
+    function focusUser(){
+        //alert(1);
+        var userId = "635427";
+
+        //alert(param.follow);
+        //alert(param.userId);
+        // alert(isIOS);
+        if(isIOS){
+            // alert("ios");
+            var param = {"userId":userId, "follow":true};
+            window.webkit.messageHandlers.UserFllow.postMessage(param);
+        }else {
+            // var param = {"userId":userId, "follow":true};
+            window.andObj.focusUser(userId, true);
+            // window.bridge.callRouter;
+        }
+    }
+
+    /**
+     * 是否已关注
+     */
+    function changeFocusState(){
+        $(".btn-min").addClass("btn-disabled");
+        $(".btn-min").html("已关注");
+    }
+ /**
+     * web分享朋友圈方法
+     */
+    $(document).ready(function () {
+       
+
+     
+
+        // var url = location.href.split('#').toString();
+        // var origin = window.location.origin;
+        // var url = origin+"/activities/share/";
+         var url = location.href.split('#').toString();//url不能写死
+        $.ajax({
+            type : "get",
+            url : "/wx/getParam",
+            dataType : "json",
+            async : false,
+            data:{url:url},
+            success : function(data) {
+                wx.config({
+                    debug: false,////生产环境需要关闭debug模式
+                    appId: data.appid,//appId通过微信服务号后台查看
+                    timestamp: data.timestamp,//生成签名的时间戳
+                    nonceStr: data.nonceStr,//生成签名的随机字符串
+                    signature: data.signature,//签名
+                    jsApiList: [//需要调用的JS接口列表
+                        'checkJsApi',//判断当前客户端版本是否支持指定JS接口
+                        'onMenuShareTimeline',//分享给好友
+                        'onMenuShareAppMessage',//分享到朋友圈
+                        'onMenuShareQQ',
+                        'onMenuShareWeibo',
+                        'onMenuShareQZone'
+                    ]
+                });
+            },
+            error: function(xhr, status, error) {
+                //alert(status);
+                //alert(xhr.responseText);
+            }
+        })
+
+    });
+
+    wx.ready(function () {
+        var title = "2018艺下“夏日倒影” 手机摄影大赛";
+        var content = "请为编号18投票";
+        var origin = window.location.origin;
+        // var origin = "sheying.artree.net.cn";
+        var link = origin+"/activities/share/23";
+        //var shareType = "homepage";
+        var picId = origin+"/attachs/img/8a9f4f6364e9fc030164ef3dcca9000d/SQUARE";
+        //分享朋友圈
+        wx.onMenuShareTimeline({
+            title: title,
+            link: link,
+            imgUrl: picId,// 自定义图标
+            trigger: function (res) {
+                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回.
+                //alert('click shared');
+            },
+            success: function (res) {
+                //alert('shared success');
+                //some thing you should do
+            },
+            cancel: function (res) {
+                //alert('shared cancle');
+            },
+            fail: function (res) {
+                //alert(JSON.stringify(res));
+            }
+        });
+        //分享给好友
+        wx.onMenuShareAppMessage({
+            title: title,
+            link: link,
+            desc: content,
+            imgUrl: picId,// 自定义图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        wx.onMenuShareQQ({
+            title: title,
+            link: link,
+            desc: content,
+            imgUrl: picId,// 自定义图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.onMenuShareWeibo({
+            title: title,
+            link: link,
+            desc: content,
+            imgUrl: picId,// 自定义图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.onMenuShareQZone({
+            title: title,
+            link: link,
+            desc: content,
+            imgUrl: picId,// 自定义图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.error(function (res) {
+            // alert(res.errMsg);
+        });
+    });
