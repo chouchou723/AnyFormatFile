@@ -1,0 +1,35 @@
+function openApp(){
+    /*var ua = window.navigator.userAgent.toLowerCase();  //娴忚鍣ㄧ被鍨�
+    //寰俊
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+		//alert('鎮ㄧ殑娴忚鍣ㄤ笉鏀寔');
+        //window.location.href='https://itunes.apple.com/cn/app/id1236615957?mt=8';
+		$("body").append("<div class='popDiv'><img src='img/text.png' /><span class='close'>鍙栨秷</span></div>");
+        $(".close").click(function(){
+          $(".popDiv").hide();
+        });
+    }else{//闈炲井淇℃祻瑙堝櫒
+
+    }  */
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+        var loadDateTime = new Date();
+        window.setTimeout(function() {
+            var timeOutDateTime = new Date();
+            if (timeOutDateTime - loadDateTime < 5000) {
+                window.location = "https://itunes.apple.com/cn/app/id1236615957?mt=8";//ios涓嬭浇鍦板潃
+            } else {
+                window.close();
+            }
+        },25);
+        window.location = "wxb4cd88e06a542940://openwebview/?ret=0";
+    }else if (navigator.userAgent.match(/android/i)) {
+        var state = null;
+        try {
+            window.location = 'arttreeyixiaapp://testpage';
+            setTimeout(function(){
+                window.location= "http://a.app.qq.com/o/simple.jsp?pkgname=com.dw.artree"; //android涓嬭浇鍦板潃
+
+            },500);
+        } catch(e) {}
+    }
+};
