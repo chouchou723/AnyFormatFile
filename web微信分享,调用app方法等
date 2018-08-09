@@ -1,5 +1,80 @@
 
+ /**
+     * web分享朋友圈方法
+     */
+  WeChatShare({
+            isDebug: false,
+            apiUrl: 'https://sc.yunqueyi.com/wechats/signs?url='+encodeURIComponent(location.href),
+            jsApiList: [
+                'onMenuShareTimeline', //分享给好友
+                'onMenuShareAppMessage', //分享到朋友圈
+            ],
+            timelineObj: { //需要分享到朋友圈
+                title: '指南知识竞赛回顾',
+                link: location.href,
+                imgUrl: 'https://file.yunqueyi.com/logo.png',
+                success: function() {},
+                cancel: function() {}
+            },
+            friendObj: { //需要分享给好友
+                title: '指南知识竞赛回顾',
+                desc: '第一时间为您播报颁奖现场的盛况',
+                link: location.href,
+                imgUrl: 'https://file.yunqueyi.com/logo.png',
+                type: '',
+                dataUrl: '',
+                success: function() {},
+                cancel: function() {}
+            }
+        });
 
+
+        function WeChatShare(options){
+            axios.defaults.headers={
+                'sysCode': '10',
+                'token': '0',
+                'deviceInfo': JSON.stringify({"app_channel":"","app_mac":"","app_uuid":"","app_version":"2.8.0","device_brand":"",
+                    "device_ip":"","device_model":"","device_net":"","device_ops":"","resolution_wh":"","system_level":"",
+                    "device_type":'10'
+                })
+            }
+            axios.get(options.apiUrl).then(function(res){
+                var obj = res.data.data.signMap;
+                wxSucc(Object.assign(options,{
+                    appId: obj.appId, // 必填，公众号的唯一标识
+                    timestamp: obj.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: obj.nonceStr, // 必填，生成签名的随机串
+                    signature: obj.signature, // 必填，签名，见附录1
+                }));
+
+                function wxSucc(options){
+                    wx.config({
+                        debug: options.isDebug, // 开启调试模式。
+                        appId: options.appId, // 必填，公众号的唯一标识
+                        timestamp: options.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: options.nonceStr, // 必填，生成签名的随机串
+                        signature: options.signature, // 必填，签名，见附录1
+                        jsApiList: options.jsApiList // 需要获取的权限方法名
+                    });
+                    wx.ready(function() {
+                        wx.checkJsApi({
+                            jsApiList: options.jsApiList
+                        });
+                        //分享到朋友圈
+                        wx.onMenuShareTimeline(options.timelineObj);
+                        //分享给朋友
+                        wx.onMenuShareAppMessage(options.friendObj);
+                    });
+                    wx.error(function(res) {
+                        console.log(res);
+                    });
+                }
+            }).catch(function(error){
+                console.log(error)
+            })
+        }
+        
+        
     /**
      * 调用 app 的分享方法
      */
